@@ -19,32 +19,52 @@ let salarios = [{
 }];
 
 
-let getEmpleado = (id, callback) => {
-    let empleadoDB = empleados.find(empleado => empleado.id === id);
+let getEmpleado = async(id) => {
 
-    //console.log(empleadoDB);
-
-    if (!empleadoDB) {
-        callback(`No existe un empleado con el ID ${ id }`);
+    let empleadoDB = empleados.find( empleado => empleado.id === id);
+    
+    if(!empleadoDB) {
+        throw new Error(`No existe un empleado con el ID ${ id }`);
     } else {
-        callback(null, empleadoDB);
+        return empleadoDB;
     }
 }
 
+let getSalario = async(empleado) => {
 
-let getSalario = (empleado, callback) => {
+    let salarioDB = salarios.find( salario => salario.id === empleado.id);
+    
+    if(!salarioDB) {
+        throw new Error(`No existe salario para el empleado ${ empleado.nombre }`);
+    } else {
+        return {
+            nombre: empleado.nombre,
+            salario: salarioDB.salario,
+            id: empleado.id
+        };
+    }
+}
 
-        if (!empleado) {
-            callback(`El empleado ingresado no existe`);
-        } else {
-            let salarioDB = salarios.find(salario => salario.id === empleado.id);
+    getEmpleado(2).then( empleado => {
+        return getSalario(empleado);
+    }).then( resp =>{
+        console.log(`El salario de ${resp.nombre} es de $${resp.salario}`);
+    }).catch( err => {
+        console.log(err);
+    });
 
-            if (!salarioDB) {
-                callback(`El usuario ${empleado.nombre} no tiene salario`);
-            } else {
-                callback(null, {
-                    nombre: empleado.nombre,
-                    salario: salarioDB.salario
-                });
-            }
-        }
+
+    let getInformacion = async (id) => {
+
+        let empleado = await getEmpleado(id);
+        let resp = await getSalario(empleado);
+
+        console.log(empleado);
+
+        return `El salario de ${resp.nombre} es de $${resp.salario}`;
+    }
+
+
+    getInformacion(3)
+        .then(mensaje => console.log(mensaje))
+        .catch(err => console.log(err));
