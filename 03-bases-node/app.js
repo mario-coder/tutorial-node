@@ -1,6 +1,11 @@
-let base = 2;
+//requireds
+
+const { crearArchivo } = require('./multiplicar/multiplicar');
+
+let base = 10;
 
 
-for(let i = 1; i <=10 ; i++){
-    console.log(`${base} * ${i} = base * i`);
-}
+
+crearArchivo(base)
+    .then(archivo => console.log(`Archivo creado: ${archivo}`))
+    .catch(e => console.log(e));
