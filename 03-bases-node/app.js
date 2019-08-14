@@ -10,10 +10,46 @@ const argv = require('yargs')
             default: 10
         }
     })
+    .command('crear', 'Genera una tabla de multiplicar en un archivo txt', {
+        base: {
+            demand: true,
+            alias: 'b'
+        },
+        limite: {
+            alias: 'l',
+            default: 10
+        }
+    })
     .help()
     .argv;
 
-const { crearArchivo } = require('./multiplicar/multiplicar');
+const { crearArchivo, listarTabla } = require('./multiplicar/multiplicar');
+
+let comando = argv._[0];
+
+switch(comando){
+
+    case 'listar':
+        console.log('Listar');
+
+        listarTabla(argv.base, argv.limite)
+            .then(data => console.log(`Tabla desplegada:\n${data}`))
+            .catch(e => console.log(e));
+        break;
+
+    case 'crear':
+        console.log('Crear');
+
+        crearArchivo(argv.base, argv.limite)
+            .then(archivo => console.log(`Archivo creado: ${archivo}`))
+            .catch(e => console.log(e));
+        break;
+
+    default:
+        console.log('Comando no reconocido');
+}
+
+
 
 //let base = 10;
 
@@ -26,7 +62,3 @@ console.log('base: ' + argv.base);
 console.log('limite: ' + argv.limite);
 
 
-
-crearArchivo(argv.base)
-    .then(archivo => console.log(`Archivo creado: ${archivo}`))
-    .catch(e => console.log(e));
