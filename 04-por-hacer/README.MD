@@ -3,6 +3,6 @@
 
 Ejecutar Comando
 
-´´´
+```
 npm install
-´´´
+```
