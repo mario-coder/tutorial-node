@@ -1,13 +1,4 @@
-// const opts = {
-//     base: {
-//         demand: true,
-//         alias: 'b'
-//     },
-//     limite: {
-//         alias: 'l',
-//         default: 10
-//     }
-// }
+
 
 const argv = require('yargs')
     .command('crear', 'Crear una tarea por hacer', {
