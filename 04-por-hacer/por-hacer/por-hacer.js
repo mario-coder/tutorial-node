@@ -23,33 +23,84 @@ const cargarDB = () => {
     //console.log(listadoPorHacer);
 }
 
-const getListado = () => {
-    
-    cargarDB();
-
-    return listadoPorHacer;
-}
 
 
 const crear = (descripcion) => {
-
+    
     cargarDB();
-
+    
     let porHacer = {
         descripcion,
         completado: false,
     };
-
+    
     //if(!listadoPorHacer.includes(porHacer)){
         listadoPorHacer.push(porHacer);
-    //}
-    guardarDB();
+        //}
+        guardarDB();
+        
+        return porHacer;
+    }
+    
+    const getListado = () => {
+        
+        cargarDB();
+    
+        return listadoPorHacer;
+    }
+    
 
-    return porHacer;
-}
+    const actualizar = (descripcion, completado = true) => {
 
+        cargarDB();
 
-module.exports = {
-    crear,
-    getListado
-}
+        let index = listadoPorHacer.findIndex( tarea => {
+            return tarea.descripcion === descripcion;
+        })
+
+        if(index >= 0){
+            listadoPorHacer[index].completado = completado;
+            guardarDB();
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    const borrar = (descripcion) => {
+
+        cargarDB();
+
+        let index = listadoPorHacer.findIndex( tarea => {
+            return tarea.descripcion === descripcion;
+        })
+
+        /*
+        if(index >= 0){
+            listadoPorHacer.splice(index, 1);
+            guardarDB();
+            return true;
+        } else {
+            return false;
+        }
+        */
+
+        let nuevoListado = listadoPorHacer.filter(tarea => {
+            return tarea.descripcion !== descripcion;
+        })
+
+        if(listadoPorHacer.length === nuevoListado.length){
+            return false;
+        } else {
+            listadoPorHacer = nuevoListado;
+            guardarDB();
+            return true;
+        }
+    }
+
+    module.exports = {
+        crear,
+        getListado,
+        actualizar,
+        borrar
+    }
