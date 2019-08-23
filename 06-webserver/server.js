@@ -1,7 +1,10 @@
 const express = require('express');
 const app = express();
- 
-app.use(express.static( __dirname + '/public'));
+
+app.use(express.static(__dirname + '/public'));
+
+//Express HBS Engine
+app.set('view engine', 'hbs');
 
 /*
 app.get('/', (req, res) => {
@@ -17,8 +20,17 @@ app.get('/', (req, res) => {
 });
 */
 
-app.get('/data', (req, res) => {
-    res.send('Hola Data');
+app.get('/', (req, res) => {
+
+    res.render('home', {
+        nombre: 'Mario',
+        anio: new Date().getFullYear()
+    });
+});
+
+
+app.get('/about', (req, res) => {
+    res.render('about');
 });
 
 app.listen(8080, () => {
