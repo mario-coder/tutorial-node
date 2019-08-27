@@ -1,8 +1,45 @@
 const express = require('express');
 const app = express();
+const bodyParser = require('body-parser');
 
-app.get('/', (req, res) => {
-    res.send('Hello world');
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// parse application/json
+app.use(bodyParser.json())
+
+
+//METODOS HTTP
+
+//obtener registros
+app.get('/usuario', (req, res) => {
+    res.send('get Usuario');
+});
+
+//crear registro
+app.post('/usuario', (req, res) => {
+
+    let body = req.body;
+
+    res.json({
+        body
+    });
+});
+
+// actualizar registro
+app.put('/usuario/:id', (req, res) => {
+
+    let id = req.params.id;
+
+    res.json({
+        id
+    });
+});
+
+
+// borrar registro
+app.delete('/usuario', (req, res) => {
+    res.send('delete Usuario');
 });
 
 
