@@ -2,6 +2,8 @@ require('./config/config');
 
 const express = require('express');
 const app = express();
+const mongoose = require('mongoose');
+
 const bodyParser = require('body-parser');
 
 
@@ -55,6 +57,16 @@ app.put('/usuario/:id', (req, res) => {
 app.delete('/usuario', (req, res) => {
     res.send('delete Usuario');
 });
+
+
+
+
+mongoose.connect('mongodb://localhost:27017/cafe', (err, res) => {
+   if(err)  throw err;
+
+   console.log('Base de datos online');
+});
+
 
 
 app.listen(process.env.PORT, () => {
