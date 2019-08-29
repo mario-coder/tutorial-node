@@ -13,50 +13,10 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
 app.use(bodyParser.json())
 
-
-//METODOS HTTP
-
-//obtener registros
-app.get('/usuario', (req, res) => {
-    res.send('get Usuario');
-});
-
-//crear registro
-app.post('/usuario', (req, res) => {
-
-    let body = req.body;
-
-    if(body.nombre === undefined) {
-
-        res.status(400).json({
-            ok: false,
-            mensaje: 'El nombre es necesario'
-        });
-
-    } else {
-        res.json({
-            body
-        });
-    }
+//RUTAS
+app.use(require('./routes/usuario-routes'));
 
 
-});
-
-// actualizar registro
-app.put('/usuario/:id', (req, res) => {
-
-    let id = req.params.id;
-
-    res.json({
-        id
-    });
-});
-
-
-// borrar registro
-app.delete('/usuario', (req, res) => {
-    res.send('delete Usuario');
-});
 
 
 
