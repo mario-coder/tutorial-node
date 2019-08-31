@@ -1,4 +1,5 @@
 const express = require('express');
+const bcrypt = require('bcrypt');
 const Usuario = require('../models/usuario-model');
 
 const app = express();
@@ -18,17 +19,19 @@ app.post('/usuario', (req, res) => {
     let usuario = new Usuario({
         nombre: body.nombre,
         email: body.email,
-        password: body.password,
+        password: bcrypt.hashSync(body.password, 10),
         role: body.role
     });
 
     usuario.save((err, usuarioDB) => {
-        if(err){
+        if (err) {
             return res.status(400).json({
-                ok:false,
+                ok: false,
                 err
             });
         }
+
+
 
         res.json({
             ok: true,
@@ -38,20 +41,20 @@ app.post('/usuario', (req, res) => {
 
 
 
-/*
-    if(body.nombre === undefined) {
+    /*
+        if(body.nombre === undefined) {
 
-        res.status(400).json({
-            ok: false,
-            mensaje: 'El nombre es necesario'
-        });
+            res.status(400).json({
+                ok: false,
+                mensaje: 'El nombre es necesario'
+            });
 
-    } else {
-        res.json({
-            body
-        });
-    }
-*/
+        } else {
+            res.json({
+                body
+            });
+        }
+    */
 
 });
 
