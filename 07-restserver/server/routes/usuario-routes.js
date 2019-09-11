@@ -18,7 +18,7 @@ app.get('/usuario', (req, res) => {
     let limite = req.query.limite || 5;
     limite = Number(limite);
 
-    Usuario.find({})
+    Usuario.find({}, 'nombre email rol estado google img')
             .skip(desde)
             .limit(limite)
             .exec((err, usuarios) => {
@@ -29,12 +29,14 @@ app.get('/usuario', (req, res) => {
                     });
                 }
 
-                res.json({
-                    ok: true,
-                    usuarios
+                Usuario.count({}, (err, conteo) => {
+                    res.json({
+                        ok: true,
+                        usuarios,
+                        conteo
+                    });
                 });
             });
-
 });
 
 //crear registro
@@ -56,8 +58,6 @@ app.post('/usuario', (req, res) => {
                 err
             });
         }
-
-
 
         res.json({
             ok: true,
@@ -99,7 +99,6 @@ app.put('/usuario/:id', (req, res) => {
             });
         }
 
-
         res.json({
             ok: true,
             usuario: usuarioDB
@@ -110,8 +109,34 @@ app.put('/usuario/:id', (req, res) => {
 
 
 // borrar registro
-app.delete('/usuario', (req, res) => {
-    res.send('delete Usuario');
+app.delete('/usuario/:id', (req, res) => {
+    //res.send('delete Usuario');
+
+    let id = req.params.id;
+    console.log(id);
+
+    Usuario.findByIdAndRemove(id, (err, usuarioBorrado) => {
+        if (err) {
+            return res.status(400).json({
+                ok: false,
+                err
+            });
+        }
+
+        if(!usuarioBorrado){
+            return res.status(400).json({
+                ok: false,
+                err: {
+                    message: 'Usuario no encontrado'
+                }
+            });
+        }
+
+        res.json({
+            ok:true,
+            usuario: usuarioBorrado
+        });
+    });
 });
 
 
