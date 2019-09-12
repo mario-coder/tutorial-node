@@ -89,7 +89,8 @@ app.put('/usuario/:id', (req, res) => {
 
     let id = req.params.id;
     let body = _.pick(req.body, ['nombre','email','img','role','estado']);
-
+//
+    
     Usuario.findByIdAndUpdate(id, body, { new: true, runValidators: true }, (err, usuarioDB) => {
 
         if (err) {
@@ -115,7 +116,12 @@ app.delete('/usuario/:id', (req, res) => {
     let id = req.params.id;
     console.log(id);
 
-    Usuario.findByIdAndRemove(id, (err, usuarioBorrado) => {
+    let cambiaEstado = {
+        estado: false
+    };
+
+    //Usuario.findByIdAndRemove(id, (err, usuarioBorrado) => {
+    Usuario.findByIdAndUpdate(id, cambiaEstado, { new: true }, (err, usuarioDB) => {
         if (err) {
             return res.status(400).json({
                 ok: false,
