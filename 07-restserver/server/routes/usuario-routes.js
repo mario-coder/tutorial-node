@@ -3,13 +3,14 @@ const bcrypt = require('bcrypt');
 const _ = require('underscore');
 
 const Usuario = require('../models/usuario-model');
+const { verificaToken } = require('../middlewares/autenticacion')
 
 const app = express();
 
 
 //METODOS HTTP
 //obtener registros
-app.get('/usuario', (req, res) => {
+app.get('/usuario', verificaToken, (req, res) => {
     //res.send('get Usuario');
 
     let desde = req.query.desde || 0;

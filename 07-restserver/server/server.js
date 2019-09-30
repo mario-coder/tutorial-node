@@ -13,7 +13,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
 app.use(bodyParser.json());
 
-//CONFIGURACIO GLOBAL DE RUTAS
+//CONFIGURACION GLOBAL DE RUTAS
 app.use(require('./routes/index'));
 
 mongoose.connect(process.env.URLDB, (err, res) => {
