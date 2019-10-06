@@ -10,7 +10,7 @@ let verificaToken = (req, res, next) => {
 
     jwt.verify(token, process.env.SEEDD, (err, decoded) => {
 
-        if(err) {
+        if (err) {
             return res.status(401).json({
                 ok: false,
                 err
@@ -18,19 +18,41 @@ let verificaToken = (req, res, next) => {
         }
 
         req.usuario = decoded.usuario
-        next()  //Se debe llamar para que continue el flujo
+        next() //Se debe llamar para que continue el flujo
     })
 
-/*
-    res.json({
-        token
-    })
-*/
+    /*
+        res.json({
+            token
+        })
+    */
+}
 
+//========================
+// Verificar Admin Role
+//========================
+
+let verificaAdminRole = (req, res, next) => {
+
+    let usuario = req.usuario
+
+
+    if (usuario.role === 'ADMIN_ROLE') {
+        next()
+    } else {
+
+        return res.json({
+            ok: false,
+            err: {
+                message: 'El usuario no es administrador'
+            }
+        })
+    }
 
 }
 
 
-module.exports = { 
-    verificaToken
+module.exports = {
+    verificaToken,
+    verificaAdminRole
 }
