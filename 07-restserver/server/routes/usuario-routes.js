@@ -20,28 +20,28 @@ app.get('/usuario', verificaToken, (req, res) => {
     limite = Number(limite);
 
     Usuario.find({}, 'nombre email rol estado google img')
-            .skip(desde)
-            .limit(limite)
-            .exec((err, usuarios) => {
-                if (err) {
-                    return res.status(400).json({
-                        ok: false,
-                        err
-                    });
-                }
+        .skip(desde)
+        .limit(limite)
+        .exec((err, usuarios) => {
+            if (err) {
+                return res.status(400).json({
+                    ok: false,
+                    err: 'Token no valido'
+                });
+            }
 
-                Usuario.count({}, (err, conteo) => {
-                    res.json({
-                        ok: true,
-                        usuarios,
-                        conteo
-                    });
+            Usuario.count({}, (err, conteo) => {
+                res.json({
+                    ok: true,
+                    usuarios,
+                    conteo
                 });
             });
+        });
 });
 
 //crear registro
-app.post('/usuario', (req, res) => {
+app.post('/usuario', verificaToken, (req, res) => {
 
     let body = req.body;
 
@@ -86,12 +86,12 @@ app.post('/usuario', (req, res) => {
 });
 
 // actualizar registro
-app.put('/usuario/:id', (req, res) => {
+app.put('/usuario/:id', verificaToken, (req, res) => {
 
     let id = req.params.id;
-    let body = _.pick(req.body, ['nombre','email','img','role','estado']);
-//
-    
+    let body = _.pick(req.body, ['nombre', 'email', 'img', 'role', 'estado']);
+    //
+
     Usuario.findByIdAndUpdate(id, body, { new: true, runValidators: true }, (err, usuarioDB) => {
 
         if (err) {
@@ -111,7 +111,7 @@ app.put('/usuario/:id', (req, res) => {
 
 
 // borrar registro
-app.delete('/usuario/:id', (req, res) => {
+app.delete('/usuario/:id', verificaToken, (req, res) => {
     //res.send('delete Usuario');
 
     let id = req.params.id;
@@ -130,7 +130,7 @@ app.delete('/usuario/:id', (req, res) => {
             });
         }
 
-        if(!usuarioBorrado){
+        if (!usuarioBorrado) {
             return res.status(400).json({
                 ok: false,
                 err: {
@@ -140,7 +140,7 @@ app.delete('/usuario/:id', (req, res) => {
         }
 
         res.json({
-            ok:true,
+            ok: true,
             usuario: usuarioBorrado
         });
     });
